@@ -73,6 +73,8 @@ Real simple.
 
 Just go to settings ---> Export ---> Export Content as JSON.
 
+Make sure to save the file as ghost.json in the same directory as the script.
+
 ### Then, run the script
 
 Move that JSON file that ghost gave you into the same directory as your script.
