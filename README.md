@@ -5,7 +5,27 @@ This is a tool to convert Ghost JSON data to Directus SQL.
 
 Ghost is great for its simplicity, but I'm ready to upgrade. 
 
+Problem is, Ghost's JSON export is a bit of a mess. It's not a flat file, but a nested file with a lot of extra data that we don't need..
+
 Ghost is giving me a big ol' JSON file with all my content, and I need to get that into Directus (and maybe some other SQL databases I'm not sure, the data seems pretty straightforward in the final result).
+
+> If you're scared to run this on your precious Ghost content, try it with the attached ghost.json file!
+
+Simply run the script, and it will create a new file called directus_import.json in the same directory as your ghost.json file.
+
+Should spit out a bunch of posts with a format something like this:
+
+```json
+[
+  {
+    "title": "Coming soon",
+    "slug": "coming-soon",
+    "html": "<p>This is headless, a brand new site by me that's just getting started. Things will be up and running here shortly, but you can <a href=\"#/portal/\">subscribe</a> in the meantime if you'd like to stay up to date and receive emails when new content is published!</p>",
+    "published_at": "2026-02-04T04:40:19.000Z",
+    "feature_image_url": "https://static.ghost.org/v4.0.0/images/feature-image.jpg"
+  },
+```
+
 
 ### Introducing ghostjson-to-directusSQL
 
