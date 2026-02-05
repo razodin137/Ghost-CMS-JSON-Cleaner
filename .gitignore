@@ -5,3 +5,4 @@ ghost.json
 neon/*.sql
 import.sql
 directus_import_ready.json
+cleaned_data.json
