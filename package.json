@@ -1,0 +1,9 @@
+{
+  "name": "ghost-data-cleaner",
+  "version": "1.0.0",
+  "description": "Clean and normalize Ghost CMS exports for import into SQL/Directus/Neon.",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "pg": "^8.18.0"
+  }
+}

@@ -49,6 +49,6 @@ const directusReady = rawPosts.map(post => {
 });
 
 // Save to a new file
-fs.writeFileSync('directus_import_ready.json', JSON.stringify(directusReady, null, 2));
+fs.writeFileSync('cleaned_data.json', JSON.stringify(directusReady, null, 2));
 
-console.log(`✅ Ready! Created 'directus_import_ready.json' with ${directusReady.length} posts.`);
+console.log(`✅ Ready! Created 'cleaned_data.json' with ${directusReady.length} posts.`);

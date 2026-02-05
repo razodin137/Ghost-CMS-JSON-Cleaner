@@ -1,0 +1,7 @@
+.env
+node_modules
+ghost.json
+*.sql
+neon/*.sql
+import.sql
+directus_import_ready.json

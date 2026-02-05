@@ -1,103 +1,72 @@
+# Ghost Data Cleaner & SQL Importer
 
-# Ghost JSON to Directus SQL
+A simple tool to clean, normalize, and export your Ghost CMS content for import into other systems like **Directus**, **Neon (PostgreSQL)**, or any SQL database.
 
-This is a tool to convert Ghost JSON data to Directus SQL.
+## What it does
 
-Ghost is great for its simplicity, but I'm ready to upgrade. 
+1.  **Cleans**: Takes a raw `ghost.json` export and strips out the noise.
+2.  **Normalizes**: Formats dates, booleans, and extracts useful relationships (tags, authors) into a flat, usable structure.
+3.  **Exports**: Generates a generic `cleaned_data.json` ready for use.
+4.  **Generates SQL**: Optionally converts that JSON into standard SQL `INSERT` statements.
 
-Problem is, Ghost's JSON export is a bit of a mess. It's not a flat file, but a nested file with a lot of extra data that we don't need..
+## Quick Start
 
-Ghost is giving me a big ol' JSON file with all my content, and I need to get that into Directus (and maybe some other SQL databases I'm not sure, the data seems pretty straightforward in the final result).
+### 1. Setup
 
-> If you're scared to run this on your precious Ghost content, try it with the attached ghost.json file!
+```bash
+# Clone the repo
+git clone <your-repo>
+cd ghost-data-cleaner
 
-Simply run the script, and it will create a new file called directus_import.json in the same directory as your ghost.json file.
+# Install dependencies
+npm install
 
-Should spit out a bunch of posts with a format something like this:
-
-```json
-[
-  {
-    "title": "Coming soon",
-    "slug": "coming-soon",
-    "status": "published",
-    "type": "post",
-    "featured": false,
-    "excerpt": "This is headless, a brand new site...",
-    "html": "<p>This is headless...</p>",
-    "published_at": "2026-02-04T04:40:19.000Z",
-    "created_at": "2026-02-04T04:40:19.000Z",
-    "updated_at": "2026-02-04T08:04:12.000Z",
-    "feature_image_url": "https://static.ghost.org/v4.0.0/images/feature-image.jpg",
-    "tags": ["News", "site-template"],
-    "author": "JOHn"
-  },
+# Setup Environment (for Neon/Postgres import)
+cp .env.example .env
+# Edit .env with your DATABASE_URL if using Neon/Postgres
 ```
 
+### 2. Export from Ghost
 
-### Introducing ghostjson-to-directusSQL
+1.  Go to Ghost Admin -> Settings -> Export.
+2.  Export content as JSON.
+3.  Save the file as `ghost.json` in this project folder.
 
-The name could use some work but it is descriptive. 
+### 3. Clean the Data
 
-We're gonna take that JSON file that Ghost gives us on the export options and we're gonna turn it into SQL that Directus can use in its own GUI "Import" button. 
+Run the cleaner script:
 
-### First, Directus.
-
-Directus needs to have a table to import this data into.
-
-You can set it up by going to Data-model ---> Add New
-
-And set a new collection in the following manner:
-
-| Display Name | Key (Field Name) | Type | Note |
-| :--- | :--- | :--- | :--- |
-| Title | title | Input (String) | |
-| Slug | slug | Input (String) | |
-| Status | status | Dropdown | Options: `published`, `draft`. |
-| Type | type | Dropdown | Options: `post`, `page`. |
-| Featured | featured | Boolean | |
-| Content | html | WYSIWYG | Select "WYSIWYG" so the HTML renders correctly. |
-| Excerpt | excerpt | Text Area | |
-| Published Date | published_at | DateTime | |
-| Created Date | created_at | DateTime | |
-| Updated Date | updated_at | DateTime | |
-| Feature Image | feature_image | Image | This creates a relation to Directus Files. |
-| Tags | tags | Tags (CSV) | Or JSON depending on import config. |
-| Author | author | Input (String) | Or relation to Users collection if setup. |
-| Ghost ID | ghost_id | Input (String) | Optional: Helps prevent duplicates if you run it twice. |
-
-
-### Next, Ghost.
-
-Real simple.
-
-Just go to settings ---> Export ---> Export Content as JSON.
-
-Make sure to save the file as ghost.json in the same directory as the script.
-
-### Then, run the script
-
-Move that JSON file that ghost gave you into the same directory as your script.
-
-Navigate to this directory via terminal and run:
-
-```
+```bash
 node clean.js
 ```
 
-> WARNING: DO NOT RUN THIS SCRIPT IN ANYWHERE EXCEPT THE DIRECTORY THAT CONTAINS THE JSON FILE.
-> It's gonna look for all json files in that directory and try to convert them. 
-> 
-> You've been warned. 
+This generates `cleaned_data.json`.
 
-### Then, import it into Directus.
+## Supported Destinations
 
-Go to Data-model ---> Import ---> Import from JSON ---> Select the file you just created (should be called directus_import.json).
+### 🐘 Neon / PostgreSQL
 
-### And that's it!
+You can import data directly into a Neon or PostgreSQL database.
 
-You should have your content in Directus now.
+**Option A: Direct Import (Fastest)**
+Imports strictly using the `cleaned_data.json` via Node.js.
 
-Let me know if you run into any errors or have questions.
+```bash
+node neon/import.js
+```
 
-##### p.s. be careful running this multiple times, especially if you've renamed the file that you're going to upload to Directus. Your files can easily be overwritten. 
+**Option B: Generate SQL**
+Generates a `neon/import.sql` file you can copy-paste into any SQL editor.
+
+```bash
+node neon/json-to-sql.js
+```
+
+### 🐰 Directus
+
+For instructions on importing into Directus:
+👉 [Read the Directus Import Guide](directus/README.md)
+
+### 🛠️ Generic Usage
+
+The `cleaned_data.json` contains an array of objects with standard fields (`title`, `slug`, `html`, `tags`, etc.). You can write your own simple script to import this into any CMS, Static Site Generator (Hugo/Astro), or Database.
