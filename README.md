@@ -20,9 +20,17 @@ Should spit out a bunch of posts with a format something like this:
   {
     "title": "Coming soon",
     "slug": "coming-soon",
-    "html": "<p>This is headless, a brand new site by me that's just getting started. Things will be up and running here shortly, but you can <a href=\"#/portal/\">subscribe</a> in the meantime if you'd like to stay up to date and receive emails when new content is published!</p>",
+    "status": "published",
+    "type": "post",
+    "featured": false,
+    "excerpt": "This is headless, a brand new site...",
+    "html": "<p>This is headless...</p>",
     "published_at": "2026-02-04T04:40:19.000Z",
-    "feature_image_url": "https://static.ghost.org/v4.0.0/images/feature-image.jpg"
+    "created_at": "2026-02-04T04:40:19.000Z",
+    "updated_at": "2026-02-04T08:04:12.000Z",
+    "feature_image_url": "https://static.ghost.org/v4.0.0/images/feature-image.jpg",
+    "tags": ["News", "site-template"],
+    "author": "JOHn"
   },
 ```
 
@@ -45,10 +53,17 @@ And set a new collection in the following manner:
 | :--- | :--- | :--- | :--- |
 | Title | title | Input (String) | |
 | Slug | slug | Input (String) | |
+| Status | status | Dropdown | Options: `published`, `draft`. |
+| Type | type | Dropdown | Options: `post`, `page`. |
+| Featured | featured | Boolean | |
 | Content | html | WYSIWYG | Select "WYSIWYG" so the HTML renders correctly. |
 | Excerpt | excerpt | Text Area | |
 | Published Date | published_at | DateTime | |
+| Created Date | created_at | DateTime | |
+| Updated Date | updated_at | DateTime | |
 | Feature Image | feature_image | Image | This creates a relation to Directus Files. |
+| Tags | tags | Tags (CSV) | Or JSON depending on import config. |
+| Author | author | Input (String) | Or relation to Users collection if setup. |
 | Ghost ID | ghost_id | Input (String) | Optional: Helps prevent duplicates if you run it twice. |
 
 
